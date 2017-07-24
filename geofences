@@ -1,0 +1,36 @@
+mGeofenceList.add(new Geofence.Builder()
+    // Set the request ID of the geofence. This is a string to identify this
+    // geofence.
+    .setRequestId(entry.getKey())
+
+    .setCircularRegion(
+            entry.getValue().latitude,
+            entry.getValue().longitude,
+            Constants.GEOFENCE_RADIUS_IN_METERS
+    )
+    .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+            Geofence.GEOFENCE_TRANSITION_EXIT)
+    .build());
+    
+    mGeofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
+        .addOnSuccessListener(this, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+          //Geofences to be added
+            }
+        })
+        .addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Failed to add geofences
+                // ...
+            }
+        });
+        
+    private GeofencingRequest getGeofencingRequest() {
+    GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+    builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+    builder.addGeofences(mGeofenceList);
+    return builder.build();
+}
